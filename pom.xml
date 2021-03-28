@@ -13,6 +13,7 @@
     <description>若依管理系统</description>
     
     <properties>
+        <pms.version>1.0.0</pms.version>
         <ruoyi.version>3.4.0</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -200,12 +201,18 @@
                 <artifactId>ruoyi-system</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-			
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
                 <artifactId>ruoyi-common</artifactId>
                 <version>${ruoyi.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>me.lolico</groupId>
+                <artifactId>pms</artifactId>
+                <version>${pms.version}</version>
             </dependency>
 
         </dependencies>
@@ -218,6 +225,7 @@
         <module>ruoyi-quartz</module>
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
+        <module>pms</module>
     </modules>
     <packaging>pom</packaging>
 
