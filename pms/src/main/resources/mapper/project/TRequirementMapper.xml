@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.lolico.pms.mapper.TRequirementMapper">
+    
+    <resultMap type="TRequirement" id="TRequirementResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="priority" column="priority"/>
+        <result property="status" column="status"/>
+        <result property="sa" column="sa"/>
+        <result property="description" column="description"/>
+        <result property="planStartDate" column="plan_start_date"/>
+        <result property="planPublishDate" column="plan_publish_date"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDatetime" column="create_datetime"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDatetime" column="update_datetime"/>
+    </resultMap>
+
+    <sql id="selectTRequirementVo">
+        select id,
+               title,
+               priority,
+               status,
+               sa,
+               description,
+               plan_start_date,
+               plan_publish_date,
+               create_by,
+               create_datetime,
+               update_by,
+               update_datetime
+        from t_requirement
+    </sql>
+
+    <select id="selectTRequirementList" parameterType="TRequirement" resultMap="TRequirementResult">
+        <include refid="selectTRequirementVo"/>
+        <where>
+            <if test="title != null  and title != ''">and title like concat('%', #{title},
+                '%')
+            </if>
+            <if test="priority != null ">and priority = #{priority}</if>
+            <if test="status != null ">and status = #{status}</if>
+            <if test="sa != null  and sa != ''">and sa = #{sa}</if>
+        </where>
+    </select>
+
+    <select id="selectTRequirementById" parameterType="Integer" resultMap="TRequirementResult">
+        <include refid="selectTRequirementVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTRequirement" parameterType="TRequirement" useGeneratedKeys="true" keyProperty="id">
+        insert into t_requirement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="priority != null">priority,</if>
+            <if test="status != null">status,</if>
+            <if test="sa != null and sa != ''">sa,</if>
+            <if test="description != null">description,</if>
+            <if test="planStartDate != null">plan_start_date,</if>
+            <if test="planPublishDate != null">plan_publish_date,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="status != null">#{status},</if>
+            <if test="sa != null and sa != ''">#{sa},</if>
+            <if test="description != null">#{description},</if>
+            <if test="planStartDate != null">#{planStartDate},</if>
+            <if test="planPublishDate != null">#{planPublishDate},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTRequirement" parameterType="TRequirement">
+        update t_requirement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="sa != null and sa != ''">sa = #{sa},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="planStartDate != null">plan_start_date = #{planStartDate},</if>
+            <if test="planPublishDate != null">plan_publish_date = #{planPublishDate},
+            </if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_datetime = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTRequirementById" parameterType="Integer">
+        delete
+        from t_requirement
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTRequirementByIds" parameterType="String">
+        delete from t_requirement where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
