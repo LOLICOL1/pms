@@ -1,11 +1,13 @@
 package me.lolico.pms.service.impl;
 
 import me.lolico.pms.domain.TRequirement;
+import me.lolico.pms.mapper.TBugMapper;
 import me.lolico.pms.mapper.TRequirementMapper;
 import me.lolico.pms.service.ITRequirementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -18,6 +20,8 @@ import java.util.List;
 public class TRequirementServiceImpl implements ITRequirementService {
     @Autowired
     private TRequirementMapper tRequirementMapper;
+    @Autowired
+    private TBugMapper tBugMapper;
 
     /**
      * 查询需求
@@ -71,6 +75,8 @@ public class TRequirementServiceImpl implements ITRequirementService {
      */
     @Override
     public int deleteTRequirementByIds(Integer[] ids) {
+        String[] array = (String[]) Arrays.stream(ids).map(String::valueOf).toArray();
+        tBugMapper.deleteTBugByRequirementNos(array);
         return tRequirementMapper.deleteTRequirementByIds(ids);
     }
 
