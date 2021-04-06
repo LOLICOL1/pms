@@ -5,9 +5,10 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import me.lolico.pms.annotation.AutoSet;
 import me.lolico.pms.domain.TRequirement;
+import me.lolico.pms.enums.OperationType;
 import me.lolico.pms.service.ITRequirementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -64,11 +65,9 @@ public class TRequirementController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('project:requirement:add')")
     @Log(title = "需求管理", businessType = BusinessType.INSERT)
+    @AutoSet(OperationType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody TRequirement tRequirement) {
-        String username = SecurityUtils.getUsername();
-        tRequirement.setCreateBy(username);
-        tRequirement.setUpdateBy(username);
         return toAjax(tRequirementService.insertTRequirement(tRequirement));
     }
 
@@ -77,9 +76,9 @@ public class TRequirementController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('project:requirement:edit')")
     @Log(title = "需求管理", businessType = BusinessType.UPDATE)
+    @AutoSet(OperationType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody TRequirement tRequirement) {
-        tRequirement.setUpdateBy(SecurityUtils.getUsername());
         return toAjax(tRequirementService.updateTRequirement(tRequirement));
     }
 
