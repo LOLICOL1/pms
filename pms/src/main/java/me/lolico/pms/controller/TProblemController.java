@@ -47,7 +47,7 @@ public class TProblemController extends BaseController {
     @GetMapping("/export")
     public AjaxResult export(TProblem tProblem) {
         List<TProblem> list = tProblemService.selectTProblemList(tProblem);
-        ExcelUtil<TProblem> util = new ExcelUtil<TProblem>(TProblem.class);
+        ExcelUtil<TProblem> util = new ExcelUtil<>(TProblem.class);
         return util.exportExcel(list, "problem");
     }
 
