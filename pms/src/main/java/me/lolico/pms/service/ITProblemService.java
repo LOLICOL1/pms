@@ -8,7 +8,6 @@ import java.util.List;
  * 问题管理Service接口
  *
  * @author lolico
- * @date 2021-04-24
  */
 public interface ITProblemService {
     /**
