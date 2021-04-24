@@ -20,7 +20,6 @@ import java.util.List;
  * 问题管理Controller
  *
  * @author lolico
- * @date 2021-04-24
  */
 @RestController
 @RequestMapping("/project/problem")
