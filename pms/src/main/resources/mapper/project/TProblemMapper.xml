@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.lolico.pms.mapper.TProblemMapper">
+
+    <resultMap type="TProblem" id="TProblemResult">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="problemLevel" column="problem_level"/>
+        <result property="appearDate" column="appear_date"/>
+        <result property="solveData" column="solve_data"/>
+        <result property="dutyDepartment" column="duty_department"/>
+        <result property="problemInfo" column="problem_info"/>
+        <result property="problemEffect" column="problem_effect"/>
+        <result property="problemCause" column="problem_cause"/>
+        <result property="solution" column="solution"/>
+        <result property="problemStatus" column="problem_status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createDatetime" column="create_datetime"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateDatetime" column="update_datetime"/>
+    </resultMap>
+
+    <sql id="selectTProblemVo">
+        select id,
+               title,
+               problem_level,
+               appear_date,
+               solve_data,
+               duty_department,
+               problem_info,
+               problem_effect,
+               problem_cause,
+               solution,
+               problem_status,
+               create_by,
+               create_datetime,
+               update_by,
+               update_datetime
+        from t_problem
+    </sql>
+
+    <select id="selectTProblemList" parameterType="TProblem" resultMap="TProblemResult">
+        <include refid="selectTProblemVo"/>
+        <where>
+            <if test="title != null  and title != ''">and title like concat('%', #{title}, '%')</if>
+            <if test="problemLevel != null  and problemLevel != ''">and problem_level = #{problemLevel}</if>
+            <if test="params.beginAppearDate != null and params.beginAppearDate != '' and params.endAppearDate != null and params.endAppearDate != ''">and appear_date between #{params.beginAppearDate} and #{params.endAppearDate}</if>
+            <if test="params.beginSolveData != null and params.beginSolveData != '' and params.endSolveData != null and params.endSolveData != ''">and solve_data between #{params.beginSolveData} and #{params.endSolveData}</if>
+            <if test="dutyDepartment != null  and dutyDepartment != ''">and duty_department = #{dutyDepartment}</if>
+            <if test="problemStatus != null ">and problem_status = #{problemStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectTProblemById" parameterType="Long" resultMap="TProblemResult">
+        <include refid="selectTProblemVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTProblem" parameterType="TProblem" useGeneratedKeys="true" keyProperty="id">
+        insert into t_problem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="problemLevel != null and problemLevel != ''">problem_level,</if>
+            <if test="appearDate != null">appear_date,</if>
+            <if test="solveData != null">solve_data,</if>
+            <if test="dutyDepartment != null and dutyDepartment != ''">duty_department,</if>
+            <if test="problemInfo != null">problem_info,</if>
+            <if test="problemEffect != null">problem_effect,</if>
+            <if test="problemCause != null">problem_cause,</if>
+            <if test="solution != null">solution,</if>
+            <if test="problemStatus != null">problem_status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="problemLevel != null and problemLevel != ''">#{problemLevel},</if>
+            <if test="appearDate != null">#{appearDate},</if>
+            <if test="solveData != null">#{solveData},</if>
+            <if test="dutyDepartment != null and dutyDepartment != ''">#{dutyDepartment},</if>
+            <if test="problemInfo != null">#{problemInfo},</if>
+            <if test="problemEffect != null">#{problemEffect},</if>
+            <if test="problemCause != null">#{problemCause},</if>
+            <if test="solution != null">#{solution},</if>
+            <if test="problemStatus != null">#{problemStatus},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTProblem" parameterType="TProblem">
+        update t_problem
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="problemLevel != null and problemLevel != ''">problem_level = #{problemLevel},</if>
+            <if test="appearDate != null">appear_date = #{appearDate},</if>
+            <if test="solveData != null">solve_data = #{solveData},</if>
+            <if test="dutyDepartment != null and dutyDepartment != ''">duty_department = #{dutyDepartment},</if>
+            <if test="problemInfo != null">problem_info = #{problemInfo},</if>
+            <if test="problemEffect != null">problem_effect = #{problemEffect},</if>
+            <if test="problemCause != null">problem_cause = #{problemCause},</if>
+            <if test="solution != null">solution = #{solution},</if>
+            <if test="problemStatus != null">problem_status = #{problemStatus},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTProblemById" parameterType="Long">
+        delete
+        from t_problem
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTProblemByIds" parameterType="String">
+        delete from t_problem where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
