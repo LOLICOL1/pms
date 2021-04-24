@@ -172,13 +172,52 @@
           </el-select>
         </el-form-item>
         <el-form-item label="提出人" prop="proposer">
-          <el-input v-model="form.proposer" placeholder="请输入提出人"/>
+          <el-select
+            v-model="form.proposer"
+            filterable
+            remote
+            placeholder="请输入提出人"
+            :remote-method="querySearch"
+            :loading="selectLoading">
+            <el-option
+              v-for="item in options"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.nickName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="负责人" prop="sa">
-          <el-input v-model="form.sa" placeholder="请输入负责人"/>
+          <el-select
+            v-model="form.sa"
+            filterable
+            remote
+            placeholder="请输入负责人"
+            :remote-method="querySearch"
+            :loading="selectLoading">
+            <el-option
+              v-for="item in options"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.nickName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="解决人" prop="solutioner">
-          <el-input v-model="form.solutioner" placeholder="请输入解决人"/>
+          <el-select
+            v-model="form.solutioner"
+            filterable
+            remote
+            placeholder="请输入解决人"
+            :remote-method="querySearch"
+            :loading="selectLoading">
+            <el-option
+              v-for="item in options"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.nickName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="解决时间" prop="solveDate">
           <el-date-picker clearable size="small"
@@ -202,6 +241,7 @@
 
 <script>
 import { addBug, delBug, exportBug, getBug, listBug, updateBug } from '@/api/project/bug'
+import { listUser } from '@/api/system/user'
 
 export default {
   name: 'Bug',
@@ -261,7 +301,9 @@ export default {
         description: [
           { required: true, message: '缺陷描述不能为空', trigger: 'blur' }
         ],
-      }
+      },
+      selectLoading: false,
+      options: []
     }
   },
   created () {
@@ -274,6 +316,19 @@ export default {
     })
   },
   methods: {
+    querySearch (query) {
+      if (query !== '') {
+        this.selectLoading = true
+        listUser({
+          nickName: query,
+          pageNum: 1,
+          pageSize: 5
+        }).then(({ rows }) => this.options = rows)
+          .finally(() => this.selectLoading = false)
+      } else {
+        this.options = []
+      }
+    },
     /** 查询缺陷列表 */
     getList () {
       this.loading = true

@@ -31,13 +31,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="责任科室" prop="dutyDepartment">
-        <el-input
+        <el-autocomplete
           v-model="queryParams.dutyDepartment"
+          :fetch-suggestions="querySearch"
           placeholder="请输入责任科室"
-          clearable
+          :trigger-on-focus="false"
+          value-key="deptName"
           size="small"
           @keyup.enter.native="handleQuery"
-        />
+        ></el-autocomplete>
       </el-form-item>
       <br/>
       <el-form-item label="发生日期">
@@ -201,7 +203,20 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="责任科室" prop="dutyDepartment">
-          <el-input v-model="form.dutyDepartment" placeholder="请输入责任科室"/>
+          <el-select
+            v-model="form.dutyDepartment"
+            filterable
+            remote
+            placeholder="请输入责任科室"
+            :remote-method="remoteMethod"
+            :loading="selectLoading">
+            <el-option
+              v-for="item in options"
+              :key="item.deptId"
+              :label="item.deptName"
+              :value="item.deptName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="问题状态" prop="problemStatus">
           <el-select v-model="form.problemStatus" placeholder="请选择问题状态">
@@ -231,6 +246,7 @@ import {
   listProblem,
   updateProblem
 } from '@/api/project/problem'
+import { listDept } from '@/api/system/dept'
 
 export default {
   name: 'Problem',
@@ -287,7 +303,9 @@ export default {
         dutyDepartment: [
           { required: true, message: '责任科室不能为空', trigger: 'blur' }
         ],
-      }
+      },
+      selectLoading: false,
+      options: []
     }
   },
   created () {
@@ -300,6 +318,22 @@ export default {
     })
   },
   methods: {
+    remoteMethod (query) {
+      if (query !== '') {
+        this.selectLoading = true
+        listDept({
+          deptName: query
+        }).then(({ data }) => this.options = data)
+          .finally(() => this.selectLoading = false)
+      } else {
+        this.options = []
+      }
+    },
+    async querySearch (queryString, cb) {
+      await listDept({
+        deptName: queryString
+      }).then(({ data }) => cb(data))
+    },
     /** 查询问题管理列表 */
     getList () {
       this.loading = true

@@ -30,13 +30,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="负责人" prop="sa">
-        <el-input
+        <el-autocomplete
           v-model="queryParams.sa"
+          :fetch-suggestions="querySearch"
           placeholder="请输入负责人"
-          clearable
+          :trigger-on-focus="false"
+          value-key="nickName"
           size="small"
           @keyup.enter.native="handleQuery"
-        />
+        ></el-autocomplete>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">
@@ -169,7 +171,20 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="负责人" prop="sa">
-          <el-input v-model="form.sa" placeholder="请输入负责人"/>
+          <el-select
+            v-model="form.sa"
+            filterable
+            remote
+            placeholder="请输入负责人"
+            :remote-method="remoteMethod"
+            :loading="selectLoading">
+            <el-option
+              v-for="item in options"
+              :key="item.userId"
+              :label="item.nickName"
+              :value="item.nickName">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="需求描述" prop="description">
           <el-input v-model="form.description" type="textarea" placeholder="请输入内容"/>
@@ -208,6 +223,7 @@ import {
   listRequirement,
   updateRequirement
 } from '@/api/project/requirement'
+import { listUser } from '@/api/system/user'
 
 export default {
   name: 'Requirement',
@@ -259,7 +275,9 @@ export default {
         sa: [
           { required: true, message: '负责人不能为空', trigger: 'blur' }
         ],
-      }
+      },
+      selectLoading: false,
+      options: []
     }
   },
   created () {
@@ -269,6 +287,26 @@ export default {
     })
   },
   methods: {
+    remoteMethod (query) {
+      if (query !== '') {
+        this.selectLoading = true
+        listUser({
+          nickName: query,
+          pageNum: 1,
+          pageSize: 5
+        }).then(({ rows }) => this.options = rows)
+          .finally(() => this.selectLoading = false)
+      } else {
+        this.options = []
+      }
+    },
+    async querySearch (queryString, cb) {
+      await listUser({
+        nickName: queryString,
+        pageNum: 1,
+        pageSize: 6
+      }).then(({ rows }) => cb(rows))
+    },
     /** 查询需求列表 */
     getList () {
       this.loading = true
