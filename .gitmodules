@@ -1,0 +1,3 @@
+[submodule "pms-front"]
+	path = pms-front
+	url = https://github.com/LOLICOL1/pms-front.git
