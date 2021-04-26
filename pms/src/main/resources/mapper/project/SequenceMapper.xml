@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.lolico.pms.mapper.SequenceMapper">
+
+    <insert id="insertSequence" parameterType="me.lolico.pms.domain.Sequence">
+        insert into sequence_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sequenceName != null">
+                sequence_name,
+            </if>
+            <if test="sequenceValue != null">
+                sequence_value,
+            </if>
+            <if test="increment != null">
+                increment,
+            </if>
+            <if test="version != null">
+                version
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sequenceName != null">
+                #{sequenceName},
+            </if>
+            <if test="sequenceValue != null">
+                #{sequenceValue},
+            </if>
+            <if test="increment != null">
+                #{increment},
+            </if>
+            <if test="version != null">
+                #{version},
+            </if>
+        </trim>
+    </insert>
+
+
+    <select id="selectByPrimaryKey" parameterType="String" resultType="me.lolico.pms.domain.Sequence">
+        select sequence_name,
+               sequence_value,
+               increment,
+               version,
+               create_datetime,
+               update_datetime
+        from sequence_info
+        where sequence_name = #{sequenceName}
+    </select>
+
+    <update id="updateSequenceValueWithOptimisticLock" parameterType="me.lolico.pms.domain.Sequence">
+        update sequence_info
+        <set>
+            <if test="sequenceValue != null">
+                sequence_value = #{sequenceValue},
+            </if>
+            <if test="version != null">
+                version = version + 1,
+            </if>
+        </set>
+        where sequence_name = #{sequenceName} and version = #{version}
+    </update>
+</mapper>
