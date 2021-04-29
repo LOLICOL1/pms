@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>me.lolico</groupId>
-    <artifactId>pms</artifactId>
+    <artifactId>pms-core</artifactId>
     <version>${pms.version}</version>
 
     <description>

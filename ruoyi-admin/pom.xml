@@ -68,7 +68,7 @@
         <!--pms模块-->
         <dependency>
             <groupId>me.lolico</groupId>
-            <artifactId>pms</artifactId>
+            <artifactId>pms-core</artifactId>
         </dependency>
 
     </dependencies>
@@ -99,7 +99,7 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <warName>${project.artifactId}</warName>
                 </configuration>
-            </plugin>   
+            </plugin>
         </plugins>
     </build>
 
