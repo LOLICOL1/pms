@@ -2,7 +2,6 @@ package me.lolico.pms.framework.web.exception;
 
 import me.lolico.pms.exception.BaseException;
 import me.lolico.pms.exception.CustomException;
-import me.lolico.pms.exception.DemoModeException;
 import me.lolico.pms.framework.constant.HttpStatus;
 import me.lolico.pms.framework.core.domain.AjaxResult;
 import me.lolico.pms.util.StringUtils;
@@ -12,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -91,15 +91,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Object validExceptionHandler(MethodArgumentNotValidException e) {
         log.error(e.getMessage(), e);
-        String message = e.getBindingResult().getFieldError().getDefaultMessage();
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String message = fieldError.getField() + fieldError.getDefaultMessage();
         return AjaxResult.error(message);
-    }
-
-    /**
-     * 演示模式异常
-     */
-    @ExceptionHandler(DemoModeException.class)
-    public AjaxResult demoModeException(DemoModeException e) {
-        return AjaxResult.error("演示模式，不允许操作");
     }
 }

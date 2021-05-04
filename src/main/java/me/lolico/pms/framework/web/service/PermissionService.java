@@ -5,7 +5,6 @@ import me.lolico.pms.framework.core.domain.model.LoginUser;
 import me.lolico.pms.util.ServletUtils;
 import me.lolico.pms.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.token.TokenService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

@@ -9,7 +9,6 @@ import me.lolico.pms.util.DateUtils;
 import me.lolico.pms.util.StringUtils;
 import me.lolico.pms.util.uuid.IdUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

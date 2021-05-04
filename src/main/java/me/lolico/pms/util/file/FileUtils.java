@@ -2,7 +2,6 @@ package me.lolico.pms.util.file;
 
 import me.lolico.pms.util.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.util.MimeTypeUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

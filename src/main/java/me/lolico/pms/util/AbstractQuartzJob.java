@@ -7,7 +7,6 @@ import me.lolico.pms.framework.constant.ScheduleConstants;
 import me.lolico.pms.service.ISysJobLogService;
 import me.lolico.pms.util.bean.BeanUtils;
 import me.lolico.pms.util.spring.SpringUtils;
-import org.apache.ibatis.reflection.ExceptionUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;

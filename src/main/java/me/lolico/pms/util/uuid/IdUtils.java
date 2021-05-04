@@ -1,6 +1,5 @@
 package me.lolico.pms.util.uuid;
 
-import java.util.UUID;
 
 /**
  * ID生成器工具类

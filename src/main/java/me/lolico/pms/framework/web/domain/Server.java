@@ -1,5 +1,6 @@
 package me.lolico.pms.framework.web.domain;
 
+import me.lolico.pms.framework.web.domain.server.*;
 import me.lolico.pms.util.Arith;
 import me.lolico.pms.util.ip.IpUtils;
 import oshi.SystemInfo;
