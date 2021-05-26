@@ -7,8 +7,6 @@
     <name>pms</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -228,6 +226,8 @@
             </activation>
             <properties>
                 <profile.active>dev</profile.active>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
                 <db.url><![CDATA[jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8]]></db.url>
                 <db.username>root</db.username>
                 <db.password>root</db.password>
@@ -237,6 +237,8 @@
             <id>prod</id>
             <properties>
                 <profile.active>prod</profile.active>
+                <maven.compiler.source>8</maven.compiler.source>
+                <maven.compiler.target>8</maven.compiler.target>
                 <db.url><![CDATA[jdbc:mysql://localhost:3306/pms?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8]]></db.url>
                 <db.username>pms</db.username>
                 <db.password>jCwXGkRGsbmcSNXm</db.password>
