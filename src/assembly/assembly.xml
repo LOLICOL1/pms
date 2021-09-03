@@ -1,0 +1,44 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.0 http://maven.apache.org/xsd/assembly-2.1.0.xsd">
+    <id>package</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>runtime/bin</directory>
+            <outputDirectory>bin</outputDirectory>
+            <includes>
+                <include>*.bat</include>
+                <include>*.sh</include>
+            </includes>
+            <fileMode>0750</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>target/classes</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>application*.yml</include>
+                <include>application*.yaml</include>
+                <include>application*.properties</include>
+                <include>logback*.xml</include>
+            </includes>
+            <fileMode>0640</fileMode>
+        </fileSet>
+    </fileSets>
+    <dependencySets>
+        <dependencySet>
+            <!-- 将项目所有依赖包拷贝到发布包的lib目录下 ：-->
+            <outputDirectory>lib</outputDirectory>
+            <!-- 符合runtime作用范围的依赖会被打包进去： -->
+            <scope>runtime</scope>
+            <!-- 配置assembly打包重命名jar包名不带版本号 -->
+            <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+            <includes>
+                <include>${project.groupId}:${project.artifactId}</include>
+            </includes>
+            <!--是否把本项目添加到依赖文件夹下:-->
+            <useProjectArtifact>true</useProjectArtifact>
+        </dependencySet>
+    </dependencySets>
+</assembly>
