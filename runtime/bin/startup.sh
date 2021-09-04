@@ -54,7 +54,7 @@ export APP_NAME=$(basename $BASE_DIR)
 if [ ! -f "${BASE_DIR}/lib/${APP_NAME}.jar" ]; then
     APP_NAME=$USER
 fi
-export DEFAULT_SEARCH_LOCATIONS="classpath:/,optional:classpath:/config/,file:./,optional:file:./config/"
+export DEFAULT_SEARCH_LOCATIONS="optional:classpath:/,optional:file:./,optional:file:./config/"
 export CUSTOM_SEARCH_LOCATIONS=${DEFAULT_SEARCH_LOCATIONS},file:${BASE_DIR}/conf/
 while getopts ":s:d:" opt
 do
@@ -110,6 +110,9 @@ fi
 
 if [ ! -d "${BASE_DIR}/logs" ]; then
   mkdir ${BASE_DIR}/logs
+fi
+if [ ! -d "${BASE_DIR}/temp" ]; then
+  mkdir ${BASE_DIR}/temp
 fi
 
 echo "$JAVA ${JAVA_OPTS}"
