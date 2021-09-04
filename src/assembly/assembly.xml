@@ -6,6 +6,15 @@
     <includeBaseDirectory>true</includeBaseDirectory>
     <fileSets>
         <fileSet>
+            <directory>${basedir}</directory>
+            <includes>
+                <include>NOTICE</include>
+                <include>LICENSE</include>
+                <include>README.md</include>
+            </includes>
+            <fileMode>0440</fileMode>
+        </fileSet>
+        <fileSet>
             <directory>runtime/bin</directory>
             <outputDirectory>bin</outputDirectory>
             <includes>
@@ -18,10 +27,13 @@
             <directory>target/classes</directory>
             <outputDirectory>conf</outputDirectory>
             <includes>
-                <include>application*.yml</include>
-                <include>application*.yaml</include>
-                <include>application*.properties</include>
-                <include>logback*.xml</include>
+                <include>logback.xml</include>
+                <include>application.yml</include>
+                <include>application-${profile.active}.yml</include>
+                <include>application.yaml</include>
+                <include>application-${profile.active}.yaml</include>
+                <include>application.properties</include>
+                <include>application-${profile.active}.properties</include>
             </includes>
             <fileMode>0640</fileMode>
         </fileSet>
