@@ -48,9 +48,12 @@ export JAVA="$JAVA_HOME/bin/java"
 # Arguments processing
 #==============================================================================
 
-export APP_NAME=$USER
 export DEBUG=false
-export BASE_DIR=`cd $(dirname $0)/..; pwd`
+export BASE_DIR=`readlink -f $(cd $(dirname $0)/..; pwd)`
+export APP_NAME=$(basename $BASE_DIR)
+if [ ! -f "${BASE_DIR}/lib/${APP_NAME}.jar" ]; then
+    APP_NAME=$USER
+fi
 export DEFAULT_SEARCH_LOCATIONS="classpath:/,optional:classpath:/config/,file:./,optional:file:./config/"
 export CUSTOM_SEARCH_LOCATIONS=${DEFAULT_SEARCH_LOCATIONS},file:${BASE_DIR}/conf/
 while getopts ":s:d:" opt
@@ -79,13 +82,14 @@ JAVA_OPTS="${JAVA_OPTS} -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemor
 JAVA_OPTS="${JAVA_OPTS} -XX:-UseLargePages"
 
 JAVA_MAJOR_VERSION=$($JAVA -version 2>&1 | sed -E -n 's/.* version "([0-9]*).*$/\1/p')
-if [[ "$JAVA_MAJOR_VERSION" -ge "9" ]] ; then
+if [ "$JAVA_MAJOR_VERSION" -ge "9" ] ; then
   JAVA_OPTS="${JAVA_OPTS} -Xlog:gc*:file=${BASE_DIR}/logs/gc.log:time,tags:filecount=10,filesize=102400"
 else
   JAVA_OPTS="${JAVA_OPTS} -Djava.ext.dirs=${JAVA_HOME}/jre/lib/ext:${JAVA_HOME}/lib/ext"
   JAVA_OPTS="${JAVA_OPTS} -Xloggc:${BASE_DIR}/logs/gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=10 -XX:GCLogFileSize=100M"
 fi
 
+JAVA_OPTS="${JAVA_OPTS} -Djava.io.tmpdir=${BASE_DIR}/temp"
 JAVA_OPTS="${JAVA_OPTS} -Dapp.home=${BASE_DIR} -Dapp.name=${APP_NAME}"
 JAVA_OPTS="${JAVA_OPTS} -jar ${BASE_DIR}/lib/${APP_NAME}.jar"
 JAVA_OPTS="${JAVA_OPTS} ${JAVA_OPTS_EXT}"

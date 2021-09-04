@@ -259,6 +259,8 @@
             <id>prod</id>
             <properties>
                 <profile.active>prod</profile.active>
+                <maven.compiler.source>8</maven.compiler.source>
+                <maven.compiler.target>8</maven.compiler.target>
                 <db.url><![CDATA[jdbc:mysql://172.16.0.14:3306/pms?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8]]></db.url>
                 <db.username>pms</db.username>
                 <db.password>pms@12345</db.password>

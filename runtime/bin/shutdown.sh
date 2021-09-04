@@ -6,7 +6,7 @@ error_exit ()
     exit 1
 }
 
-BASE_DIR=`cd $(dirname $0)/.. && pwd`
+BASE_DIR=`readlink -f $(cd $(dirname $0)/..; pwd)`
 
 PID=`ps -ef | grep "app.home=${BASE_DIR}" | grep java | grep -v grep | awk '{print $2}'`
 if [ -z "$PID" ] ; then

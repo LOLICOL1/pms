@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 error_exit ()
 {
@@ -6,6 +6,10 @@ error_exit ()
     exit 1
 }
 
+loading ()
+{
+  echo -e ".\c"
+}
 #==============================================================================
 # JDK Detected
 #==============================================================================
@@ -48,8 +52,8 @@ export PATH=$JAVA_HOME/bin:$PATH
 # Dumping
 #==============================================================================
 
-BASE_DIR=`cd $(dirname $0)/.. && pwd`
-DUMP_DIR="${BASE_DIR}/dump/`date +%Y-%m-%dT%H:%M:%S`"
+BASE_DIR=`readlink -f $(cd $(dirname $0)/..; pwd)`
+DUMP_DIR="${BASE_DIR}/dump/`date +%Y%m%d%H%M%S`"
 
 PID=`ps -ef | grep "app.home=${BASE_DIR}" | grep java | grep -v grep | awk '{print $2}'`
 if [ -z "$PID" ]; then
@@ -61,40 +65,46 @@ if [ ! -d ${DUMP_DIR} ]; then
 fi
 
 APP_NAME=`ps -ef | grep "app.home=${BASE_DIR}" | grep java | grep -v grep | awk '{match($0,/app\.name=(\S+)/,a);print a[1]}'`
-echo "Dumping ${APP_NAME}(${PID}) ..."
+echo "Dumping the ${APP_NAME}(${PID}) ..."
+jstat -gc $PID > $DUMP_DIR/jstat-gc-$PID.dump 2>&1 && loading
+jstat -gcutil $PID > $DUMP_DIR/jstat-gcutil-$PID.dump 2>&1 && loading
+jstat -gccapacity $PID > $DUMP_DIR/jstat-gccapacity-$PID.dump 2>&1 && loading
+jstack $PID > $DUMP_DIR/jstack-$PID.dump 2>&1 && loading
 
-jinfo $PID > $DUMP_DIR/jinfo-$PID.dump 2>&1
-jstat -gc $PID > $DUMP_DIR/jstat-gc-$PID.dump 2>&1
-jstat -gcutil $PID > $DUMP_DIR/jstat-gcutil-$PID.dump 2>&1
-jstat -gccapacity $PID > $DUMP_DIR/jstat-gccapacity-$PID.dump 2>&1
-jstack $PID > $DUMP_DIR/jstack-$PID.dump 2>&1
-jmap $PID > $DUMP_DIR/jmap-$PID.dump 2>&1
-jmap -heap $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1
-jmap -histo $PID > $DUMP_DIR/jmap-histo-$PID.dump 2>&1
+JAVA_MAJOR_VERSION=$($JAVA -version 2>&1 | sed -E -n 's/.* version "([0-9]*).*$/\1/p')
+if [ "$JAVA_MAJOR_VERSION" -ge "9" ] ; then
+  jhsdb jinfo --pid $PID > $DUMP_DIR/jinfo-$PID.dump 2>&1 && loading
+  jhsdb jmap --heap --pid $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
+  jhsdb jmap --histo --pid $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
+else
+  jinfo $PID > $DUMP_DIR/jinfo-$PID.dump 2>&1 && loading
+  jmap -heap $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
+  jmap -histo $PID > $DUMP_DIR/jmap-histo-$PID.dump 2>&1 && loading
+fi
 
 if [ -r /usr/sbin/lsof ]; then
-  /usr/sbin/lsof -p $PID > $DUMP_DIR/lsof.dump
+  /usr/sbin/lsof -p $PID > $DUMP_DIR/lsof.dump && loading
 fi
 if [ -r /bin/netstat ]; then
-  /bin/netstat -an > $DUMP_DIR/netstat.dump 2>&1
+  /bin/netstat -an > $DUMP_DIR/netstat.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/iostat ]; then
-  /usr/bin/iostat > $DUMP_DIR/iostat.dump 2>&1
+  /usr/bin/iostat > $DUMP_DIR/iostat.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/mpstat ]; then
-  /usr/bin/mpstat > $DUMP_DIR/mpstat.dump 2>&1
+  /usr/bin/mpstat > $DUMP_DIR/mpstat.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/vmstat ]; then
-  /usr/bin/vmstat > $DUMP_DIR/vmstat.dump 2>&1
+  /usr/bin/vmstat > $DUMP_DIR/vmstat.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/free ]; then
-  /usr/bin/free -th > $DUMP_DIR/free.dump 2>&1
+  /usr/bin/free -th > $DUMP_DIR/free.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/sar ]; then
-  /usr/bin/sar > $DUMP_DIR/sar.dump 2>&1
+  /usr/bin/sar > $DUMP_DIR/sar.dump 2>&1 && loading
 fi
 if [ -r /usr/bin/uptime ]; then
-  /usr/bin/uptime > $DUMP_DIR/uptime.dump 2>&1
+  /usr/bin/uptime > $DUMP_DIR/uptime.dump 2>&1 && loading
 fi
 
-echo "INFO: Dump at: $DUMP_DIR OK !"
+echo && echo "INFO: Dump at: $DUMP_DIR OK !"
