@@ -8,8 +8,9 @@ error_exit ()
 
 loading ()
 {
-  echo -e ".\c"
+  echo ".\c"
 }
+
 #==============================================================================
 # JDK Detected
 #==============================================================================
@@ -46,7 +47,7 @@ if [ -z "$JAVA_HOME" ]; then
   fi
 fi
 export JAVA_HOME
-export PATH=$JAVA_HOME/bin:$PATH
+export JAVA="$JAVA_HOME/bin/java"
 
 #==============================================================================
 # Dumping
@@ -75,7 +76,7 @@ JAVA_MAJOR_VERSION=$($JAVA -version 2>&1 | sed -E -n 's/.* version "([0-9]*).*$/
 if [ "$JAVA_MAJOR_VERSION" -ge "9" ] ; then
   jhsdb jinfo --pid $PID > $DUMP_DIR/jinfo-$PID.dump 2>&1 && loading
   jhsdb jmap --heap --pid $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
-  jhsdb jmap --histo --pid $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
+  jhsdb jmap --histo --pid $PID > $DUMP_DIR/jmap-histo-$PID.dump 2>&1 && loading
 else
   jinfo $PID > $DUMP_DIR/jinfo-$PID.dump 2>&1 && loading
   jmap -heap $PID > $DUMP_DIR/jmap-heap-$PID.dump 2>&1 && loading
