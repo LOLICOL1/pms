@@ -256,9 +256,9 @@
             </activation>
             <properties>
                 <profile.active>dev</profile.active>
-                <db.url><![CDATA[jdbc:mysql://localhost:3306/ry-vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8]]></db.url>
-                <db.username>root</db.username>
-                <db.password>root</db.password>
+                <db.url><![CDATA[jdbc:mysql://gz-cynosdbmysql-grp-l2hrqfwx.sql.tencentcdb.com:20720/pms-dev?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8]]></db.url>
+                <db.username>dev</db.username>
+                <db.password>dev</db.password>
             </properties>
         </profile>
         <profile>
