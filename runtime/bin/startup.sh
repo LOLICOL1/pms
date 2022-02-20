@@ -77,7 +77,7 @@ if $DEBUG; then
   JAVA_OPTS="${JAVA_OPTS} -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=${DEBUG_PORT},server=y,suspend=n"
 fi
 
-JAVA_OPTS="${JAVA_OPTS} -server -Xms128m -Xmx128m -Xss256k -XX:NewRatio=1 -XX:SurvivorRatio=8 -XX:MetaspaceSize=96m -XX:MaxMetaspaceSize=96m"
+JAVA_OPTS="${JAVA_OPTS} -server -Xms256m -Xmx256m -Xss256k -XX:NewRatio=2 -XX:SurvivorRatio=8 -XX:MetaspaceSize=128m -XX:MaxMetaspaceSize=128m"
 JAVA_OPTS="${JAVA_OPTS} -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${BASE_DIR}/logs/java_heapdump.hprof"
 JAVA_OPTS="${JAVA_OPTS} -XX:-UseLargePages"
 
@@ -123,4 +123,4 @@ fi
 # start
 echo "$JAVA ${JAVA_OPTS}" > ${BASE_DIR}/logs/start.out 2>&1 &
 nohup $JAVA ${JAVA_OPTS} >> ${BASE_DIR}/logs/start.out 2>&1 &
-echo "Application is starting，you can check the ${BASE_DIR}/logs/start.out"
+echo "Application \`${APP_NAME}\` is starting，you can check the ${BASE_DIR}/logs/start.out"
